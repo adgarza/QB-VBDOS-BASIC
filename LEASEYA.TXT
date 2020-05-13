@@ -1,0 +1,672 @@
+	       ANALIZADOR DE EXPRESIONES MATEMATICAS PARA DOS
+
+Este archivo contiene una descripci¢n de las propiedades y mÇtodos del m¢dulo 
+ANALIZEM.bas, £til para analizar expresiones matem†ticas y proporcionar el 
+resultado de la evaluaci¢n.
+
+Este archivo es de texto plano y est† establecido por temas. Para ir a un
+tema en particular, tan s¢lo, en la opci¢n de b£squeda de tu editor, teclea
+el n£mero del tema por ir (entre corchetes []) y tu editor te llevar† al
+tema que necesites. Por ejemplo: para ir al tema de Uso de variables, en
+la b£squeda de tu editor teclea [3.0].
+
+		       Indice
+Archivos incluidos....................................................[0.0]
+Uso del m¢dulo........................................................[1.0]
+Evaluaci¢n de expresiones.............................................[2.0]
+Uso de variables......................................................[3.0]
+Agregar y eliminar variables..........................................[3.1]
+Una nota final........................................................[3.2]
+Resumen de Funciones y Procedimientos del m¢dulo ANALIZEM.............[4.0]
+AnalizaExpr[#] (Funci¢n)..............................................[4.1]
+setExpresion (Procedimiento)..........................................[4.2]
+Expresion[$] (Funci¢n)................................................[4.3]
+CErr[%] (Funci¢n).....................................................[4.4]
+CuentaVar[%] (Funci¢n)................................................[4.5]
+DErr[$] (Funci¢n).....................................................[4.6]
+doLimpiaVar (Procedimiento)...........................................[4.7]
+NombreVar[$] (Funci¢n)................................................[4.8]
+setNuevaVar (Procedimiento)...........................................[4.9]
+setNuevoValor (Procedimiento)........................................[4.10]
+getObtieneVar (Procedimiento)........................................[4.11]
+doRemVar (Procedimiento).............................................[4.12]
+Valor[#] (Funci¢n)...................................................[4.13]
+Constructor (Procedimiento)..........................................[4.14]
+Destructor (Procedimiento)...........................................[4.15]
+
+
+[0.0] Archivos incluidos:
+Este paquete ZIP incluye los siguientes archivos:
+
+ANALIZEM.BAS    El c¢digo fuente del Analizador de expresiones matem†ticas (QBASIC).
+ANALIZEM.INC    Archivo con las declaraciones necesarias para utilizar el programa.
+ANALIZEM.QLB    Biblioteca para QuickBASIC.
+ANALIZEM.LIB    Biblioteca de compilaci¢n para QuickBASIC.
+ANALIZEM.EXE    Ejecutable del programa que muestra un ejemplo de su uso.
+LEASEYA.TXT     Este archivo.
+README.TXT	Este mismo archivo.
+
+
+[1.0] Uso del m¢dulo:
+
+El m¢dulo original, es una clase generada en VB4.0 para utilizarse en 
+cualquier versi¢n de Visual Basic (4.0 o superior). êste c¢digo ha sido
+adaptado de la clase original, y conserva su sabor de clase. As°, podr°a
+tenerse la sensaci¢n de programar con objetos en QBASIC, a pesar de la
+nula existencia de un soporte a este paradigma en tal entorno.
+
+Por su calidad de m¢dulo, es muy c¢modo utilizar sus posibilidades con tan 
+s¢lo agregarlo al programa que lo necesite. Es un m¢dulo corto, por lo que
+los recursos se utilizan de forma adecuada. Este m¢dulo, en su c¢digo fuente, 
+funciona sin problemas en QBASIC, QuickBasic 4.5, PDS7 y VB-DOS. 
+
+El m¢dulo puede ejecutarse por s° solo, dado que incluye un c¢digo de ejemplo
+para su uso, mismo que inicia en la parte que dice Ciclo del programa 
+principal. Su objetivo es que lo veas trabajar y analices su funcionamiento.
+Si no cuentas con alguno de los entornos de programaci¢n indicados, puedes
+ejecutar el programa ANALIZEM.EXE que te mostrar† c¢mo funciona en general
+el analizador de expresiones matem†ticas.
+
+Para utilizar el m¢dulo, debe a§adirse al proyecto de QB, PDS o VB-DOS. Si no 
+sabes c¢mo agregar m¢dulos a tu proyecto, consulta la ayuda en l°nea o tu 
+manual de usuario.
+
+Una vez que agregaste el m¢dulo, deber†s copiar, en todos los m¢dulos de tu
+programa que lo necesiten, las declaraciones de las funciones que te marca
+el m¢dulo ANALIZEM.BAS en su cabecera, y que a continuaci¢n se indican:
+
+' -----Copia estas declaraciones en tus m¢dulos ----
+DECLARE SUB Constructor ()
+DECLARE SUB Destructor ()
+DECLARE SUB doLimpiaVar ()
+DECLARE SUB doRemVar (Variable AS STRING)
+DECLARE SUB getObtieneVar ()
+DECLARE SUB setExpresion (strCualExpresion AS STRING)
+DECLARE SUB setNuevaVar (strNombre AS STRING)
+DECLARE SUB setNuevoValor (varVariable AS STRING, varValor AS DOUBLE)
+DECLARE FUNCTION AnalizaExpr# ()
+DECLARE FUNCTION Expresion$ ()
+DECLARE FUNCTION CErr% ()
+DECLARE FUNCTION CuentaVar% ()
+DECLARE FUNCTION DErr$ ()
+DECLARE FUNCTION NombreVar$ (iCualVariable AS INTEGER)
+DECLARE FUNCTION Valor# (varVariable AS STRING)
+' -----La copia es hasta aqu°.---------------------------------
+
+Estas declaraciones tambiÇn se encuentran en el archivo ANALIZEM.INC y puedes
+pegarlas al incluir el archivo en QuickBASIC o Una vez hecho esto, ya puedes 
+hacer uso de Çl. 
+
+TambiÇn puedes utilizar la biblioteca ANALIZEM.QLB en tu programa. Coloca el
+archivo ANALIZEM.QLB y ANALIZEM.LIB en la carpeta donde tienes las bibliotecas
+de QuickBASIC, PDS o VB-DOS y carga el entorno con /l ANALIZEM. Por ejemplo, 
+si ejecutas QuickBASIC, podr°as cargar la biblioteca de la siguiente forma:
+
+QB /l ANALIZEM
+
+Acto seguido, deber†s copiar las declaraciones del archivo ANALIZEM.INC en tu
+programa en cada m¢dulo que sea necesario. En su caso, podr°as ahorrarte la 
+copia (y recursos del programa) si haces uso de la palabra clave $INCLUDE, de
+la siguiente forma (se asume que el archivo ANALIZEM.INC se encuentra en el
+mismo directorio que el programa en que se ejecutar†):
+
+' $INCLUDE: 'ANALIZEM.INC'
+
+Una vez hechas las adiciones necesarias, est†s listo para empezar a utilizar
+el Analizador de F¢rmulas Matem†ticas para DOS. La forma m†s rudimentaria de 
+hacerlo trabajar es como sigue:
+
+  Constructor               ' Debe ejecutarse antes que cualquier otro Proc.
+  setExpresion "5 + 3 * 8" ' No importan los espacios.
+  PRINT "El resultado es: "; AnalizaExpr  ' Muestra el resultado
+
+As°, en tres l°neas de c¢digo, ver°as en una l°nea de texto resultado de 
+la expresi¢n (Constructor s¢lo se ejecuta una vez en el programa).
+
+
+[2.0] Evaluaci¢n de expresiones:
+
+Este m¢dulo cuenta con varios procedimientos y funciones, pero de ellos 
+7 procedimientos y 7 funciones son los £nicos que manejar†s para poder 
+llevar a buen fin la evaluaci¢n de la expresi¢n y la manipulaci¢n de 
+variables. Permite, a su vez, ejecutar expresiones que incluyan 
+exponenciaci¢n (^), multiplicaci¢n (*), divisi¢n (/), suma (+) y 
+resta (-). Existe una jerarqu°a de operadores, esta jerarqu°a se 
+aplica de izquierda a derecha. Primero se eval£an aquellos valores 
+potenciados (^), luego (De izquierda a derecha) los multiplicados y 
+divididos (El que se encuentre primero) y finalmente las sumas y 
+restas (Igual al anterior). A su vez, esta nueva versi¢n "a" cuenta con 
+la verificaci¢n de la ley de los signos. 
+
+Es decir, si se proporcionas una expresi¢n como la siguiente:
+
+  setExpresion "5 + 3 * 8"
+
+El resultado ser°a 29 y no 64, dado que primero se ejecuta la multiplicaci¢n 
+(3 * 8 = 24) y el resultado lo suma a 5 (5 + 24 = 29). Si deseas que ciertas 
+partes de la expresi¢n sean evaluadas antes, debes encerrarlas entre 
+parÇntesis. En el ejemplo anterior, para obtener 64 la f¢rmula ser°a:
+
+  setExpresion "(5 + 3) * 8"
+
+El siguiente ejemplo tambiÇn es v†lido:
+
+  setExpresion = "(5 + (4 - 1)) * 8"
+
+De este modo, se anidan parÇntesis en la expresi¢n. As° se ejecutar°a 
+inicialmente la expresi¢n entre los parÇntesis internos, para luego 
+continuar con lo dem†s.
+
+[3.0] Uso de Variables:
+
+Este m¢dulo puede utilizar variables en las expresiones. Para el caso, 
+deber†n proporcionarse los valores de cada variable para poder llevar 
+a cabo el proceso. Podr°as necesitar una expresi¢n como la que sigue:
+
+  setExpresion "(a^2) + (2*(a*b)) + (b^2)"
+
+N¢tese que los nombres de las variables deben iniciar con una letra y 
+pueden continuar con m†s letras, n£meros o guiones bajos o una 
+combinaci¢n de todos.  No utilices caracteres acentuados, especiales 
+o § para los nombres de variables. Procura no utilizar nombres de variables 
+de m†s de 24 caracteres. Un nombre muy largo de variable puede provocar 
+errores de dedo al teclearse.
+
+Los siguientes son nombres v†lidos de variables:
+  
+  x
+  Valor1
+  CALCULO12423423534
+  Meta_Idustrial
+  Calculo_estadistico_
+
+(Los nombres de variables no son sensibles a may£sculas y min£sculas. 
+Por lo tanto es indistinto hacer referencia a una variable como 
+Valor1, VALOR1, vAlOr1, etc.)
+
+Los siguientes no son nombres v†lidos de variables:
+
+  10x
+  Validaci¢n.de.datos
+  C†lculo
+  A§o_&_Mes
+
+El valor predeterminado de las variables es Nulo. Para poder hacer 
+uso de la variable debes asignarle un valor. El siguiente ser°a un ejemplo 
+program†tico de hacerlo (en el supuesto de que a=6 y b=15):
+
+  setNuevoValor "a", 6
+  setNuevoValor "b", 15
+
+Si supiÇramos que la variable a ordinalmente es la 1 y la b es la 2, 
+puedes asignar los valores como sigue:
+
+  setNuevoValor "1", 6
+  setNuevoValor "2", 15
+
+Observa que los n£meros deber†n ir entre comillas. De este modo, es 
+indistinto dirigirse a la variable por cualquiera de los dos mÇtodos. 
+Al ejecutar el an†lisis de la expresi¢n, el resultado deber† ser 441.
+
+El valor por asignar a la variable debe ser numÇrico. Puedes utilizar el 
+procedimiento setNuevoValor cuantas veces lo requieras para cambiar los 
+valores a las variables.
+
+Para saber el valor que tiene una determinada variable, utiliza el mÇtodo 
+Valor, como en el siguiente ejemplo:
+
+  PRINT Valor("a")
+  IF CErr = 4 THEN  ' La variable no ha sido inicializada
+    PRINT DErr
+  END IF
+
+El mÇtodo Valor devuelve un Double que puede ser 0 o cualquier otro valor 
+numÇrico que se le haya asignado a la variable. Si, luego de solicitar el 
+valor, te encuentras conque CErr (clave de error) vale 4, quiere decir que
+la variable no ha sido inicializada.
+
+[3.1] Agregar y Eliminar variables:
+
+Puedes agregar variables de dos maneras:
+
+Una de ellas, es dejar que el m¢dulo analice la cadena para encontrar las 
+variables intr°nsecas. De forma autom†tica te dir† cuantas variables hay. 
+Para hacer eso, usa el procedimiento doObtieneVar.
+
+  setExpresion "(a^2) + (2*(a*b)) + (b^2)"
+  doObtieneVar
+
+DespuÇs de este paso, el m¢dulo ya sabr† que hay dos variables: a y b. Para 
+saber cuantas variables encontr¢ el objeto, utiliza la funci¢n CuentaVar:
+
+  Print "Existen"; CuentaVar; " variables en la memoria."
+
+La segunda manera de hacerlo, es con el procedimiento setNuevaVar. Este 
+procedimiento se utiliza como en el siguiente ejemplo:
+
+  setNuevaVar "MiVariable"
+
+De este modo, se agregar† una variable con un valor inicial Nulo a la 
+memoria. Las variables son persistentes. Esto quiere decir que se 
+conservar†n los nombres y valores de variables proporcionadas durante toda 
+la vida de programa. Esto, por supuesto, puede redundar en un desperdicio 
+de recursos. Sin embargo, puedes eliminar variables mediante dos mÇtodos: 
+doRemVar y doLimpiaVar.
+
+Con doRemVar se pueden eliminar variables expresas. Es decir, si ya no se 
+necesita la variable "a", puede ejecutarse el siguiente c¢digo:
+
+  doRemVar "a"
+
+doLimpiaVar es m†s radical. Eliminar† todas las variables de la memoria. 
+El siguiente ejemplo:
+
+  doLimpiaVar
+
+har† que todas las variables que existan sean eliminadas de la memoria.
+
+
+[3.2] Una nota final
+
+Este m¢dulo se entrega "como est†" y no me hago responsable por ning£n error 
+o da§o causado directa o indirectamente por Çl. Si se alterar† con el fin de 
+mejorar sus capacidades, por favor incl£yase el presente documento y dÇjeseme 
+el crÇdito correspondiente. He trabajado varias horas en esto y creo que me 
+merezco un crÇdito por ello.
+
+Cualquier duda, recomendaci¢n o reporte de error, h†gase llegar a mi 
+direcci¢n de correo electr¢nico:
+
+A. David Garza Mar°n
+adgarza@spin.com.mx
+
+o por v°a telef¢nica al (52) (5) 693-6658 en MÇxico, D. F.
+
+Agradezco infinitamente a Marco A. PÇrez L¢pez y Guillermo (El Guille) la 
+ayuda prestada durante el proceso de creaci¢n de este programa, en su versi¢n
+original como m¢dulo de clase. TambiÇn agradezco a Alejandro Ju†rez las 
+modificaciones hechas para solucionar algunos errores y que se reconozca 
+la ley de los signos en las operaciones.
+
+---------------------------------------------------------------------------
+[4.0] Resumen de Funciones y Procedimientos del m¢dulo ANALIZEM:
+
+[4.1] AnalizaExpr[#] (Funci¢n)
+
+Lleva a cabo el an†lisis de la f¢rmula que se haya asignado con el 
+procedimiento setExpresion:
+
+Sintaxis:
+
+[variable# = ]AnalizaExpr
+
+Ejemplo:
+
+PRINT AnalizaExpr
+
+Nota:
+
+Aseg£rate que hayas asignado la cadena por analizar con el procedimiento 
+setExpresion. Devuelve un valor de tipo DOUBLE.
+
+Ve TambiÇn:
+
+setExpresion.
+
+
+[4.2] setExpresion (Procedimiento)
+
+Asigna la cadena que contiene una expresi¢n matem†tica por evaluar. Esta 
+cadena debe tener operaciones como potenciaci¢n, multiplicaci¢n, divisi¢n, 
+suma y resta. Puede incluir variables y parÇntesis.
+
+Sintaxis:
+
+setExpresion <valorDeCadena>
+
+Ejemplo:
+
+setExpresion "5 * 7 + (a / c)"
+
+Notas:
+
+Puedes asignar el valor de la cadena asignada para evaluar con este 
+procedimiento. Puedes utilizarlo cuantas veces lo desees.
+
+Ve tambiÇn:
+
+AnalizaExpr
+
+
+[4.3] Expresion[$] (Funci¢n)
+
+Devuelve la cadena asignada con setExpresion o "" si no se ha asignado
+ninguna cadena.
+
+Sintaxis:
+
+[variable# = ]Expresion
+
+Ejemplo:
+
+PRINT Expresion
+
+Nota:
+
+Devuelve un valor de tipo STRING.
+
+Ve tambiÇn:
+
+AnalizaExpr
+
+
+
+[4.4] CErr[%] (Funci¢n)
+
+Funci¢n que devuelve el c¢digo de error ocurrido.
+
+Sintaxis:
+
+[Variable = ]CErr
+
+Ejemplo:
+
+PRINT CErr
+
+Notas:
+
+Los c¢digos de error devueltos son los siguientes:
+
+	0 (La operaci¢n se realiz¢ con Çxito)
+	1 (No se aceptan caracteres especiales, acentuados o §)
+	2 (La variable indicada no existe)
+	3 (S¢lo se aceptan valores numÇricos o Empty)
+	4 (Hay variables sin inicializar)
+	5 (No se ha asignado una expresi¢n por evaluar)
+	6 (Falta, al menos, un cierre de parÇntesis)
+	7 (La variable indicada ya existe)
+	8 (No se puede dividir entre cero)
+
+Devuelve un valor de tipo INTEGER.
+
+Ve tambiÇn:
+
+DErr
+
+
+[4.5] CuentaVar[%] (Funci¢n)
+
+Funci¢n que devuelve la cantidad de variables que est†n en memoria.
+
+Sintaxis:
+
+[Variable = ]CuentaVar
+
+Ejemplo:
+
+IVariables = CuentaVar
+
+Notas:
+
+Devuelve un valor de tipo INTEGER.
+
+
+[4.6] DErr[$] (Funci¢n)
+
+Funci¢n que devuelve el texto del c¢digo de error ocurrido.
+
+Sintaxis:
+
+[Variable$ =]DErr
+
+Ejemplo:
+
+strError = DErr
+
+Notas:
+
+Los c¢digos de error devueltos son los siguientes:
+
+	0 (La operaci¢n se realiz¢ con Çxito)
+	1 (No se aceptan caracteres especiales, acentuados o §)
+	2 (La variable indicada no existe)
+	3 (S¢lo se aceptan valores numÇricos o Empty)
+	4 (Hay variables sin inicializar)
+	5 (No se ha asignado una expresi¢n por evaluar)
+	6 (Falta, al menos, un cierre de parÇntesis)
+	7 (La variable indicada ya existe)
+	8 (No se puede dividir entre cero)
+
+Devuelve un valor de tipo STRING.
+
+Ve tambiÇn:
+
+CErr
+
+
+[4.7] doLimpiaVar (Procedimiento)
+
+Elimina de la memoria todas las variables que se encuentren all°.
+
+Sintaxis:
+
+doLimpiaVar
+
+Ejemplo:
+
+doLimpiaVar
+
+Notas:
+
+Una vez que las variables son removidas de la memoria, no hay manera de 
+recuperarlas, o a sus valores.
+
+Ve tambiÇn:
+
+doRemVar
+
+
+[4.8] NombreVar[$] (Funci¢n)
+
+Devuelve el nombre de la variable que se encuentra en la posici¢n indicada.
+
+Sintaxis:
+
+[variable = ]NombreVar(<posici¢n>)
+
+Ejemplo:
+
+CualVariable = NombreVar(1)
+
+Notas:
+
+Posici¢n es un valor que se encuentra entre 1 y CuentaVar. Si CuentaVar 
+tiene un valor de Cero, cualquier intento por utilizar esta propiedad 
+redundar† en un error. Devuelve un valor de tipo INTEGER.
+
+
+
+[4.9] setNuevaVar (Procedimiento)
+
+Agrega una variable al conjunto de variables almacenadas en la memoria.
+
+Sintaxis:
+
+setNuevaVar <nombre_de_variable>
+
+Donde:
+
+	* nombre_de_variable  es una cadena que contiene el nombre que 
+	  identificar† a la variable
+
+Ejemplo:
+
+setNuevaVar "MiVariable"
+
+Notas:
+
+El nombre de la variable debe empezar con una letra y, en seguida, puede 
+tener otras letras, n£meros o guiones bajos. Puede tener hasta 24 caracteres. 
+No incluyas caracteres acentuados, especiales o e§es. El valor predeterminado 
+de cualquier variable asignada es Nulo ("").
+
+
+Ve tambiÇn:
+
+setNuevoValor
+
+
+[4.10] setNuevoValor (Procedimiento)
+
+Asigna un nuevo valor a la variable indicada.
+
+Sintaxis:
+
+setNuevoValor <nombreDeVariable>, <valorNumÇrico>
+
+Donde:
+
+	* nombreDeVariable  es una cadena que contiene el nombre que 
+	  identifica a la variable a la que se le asignar† un nuevo valor.
+	* valorNumÇrico es un argumento que permite cambiar la asignaci¢n 
+	  a la variable. valorNumÇrico puede ser cualquier n£mero entero
+	  o real dentro de los l°mites de un valor Double.
+
+Ejemplo:
+
+setNuevoValor "MiVariable", 50
+
+Notas:
+
+Si la variable indicada no existe, se obtiene un error. Si el valor asignado 
+no es correcto, obtendr†s un error. Si se asignar† el valor mediante alguna
+variable numÇrica que no sea de tipo Double, podr°a obtenerse un error. Ante
+esto, tan s¢lo col¢quese la variable con la funci¢n CDBL() para obtener el
+dato adecuado.
+
+Ve tambiÇn:
+
+setNuevaVar
+
+
+[4.11] getObtieneVar (Procedimiento)
+
+Analiza la expresi¢n que se evaluar† y obtendr† las variables contenidas.
+
+Sintaxis:
+
+getObtieneVar
+
+Ejemplo:
+
+getObtieneVar
+
+Notas:
+
+Si no hay variables o no se ha asignado una cadena por evaluar con el 
+procedimiento setExpresion, getObtieneVar devolver† 0 en la propiedad 
+CuentaVar (O el mismo n£mero de variables que ya exist°an en la memoria). 
+Si en la expresi¢n hay nombres de variables con caracteres inadecuados, 
+se abortar† todo el proceso de obtenci¢n de variables.
+
+Ve tambiÇn:
+
+CuentaVar
+
+
+[4.12] doRemVar (Procedimiento)
+
+Remueve la variable indicada.
+
+Sintaxis:
+
+doRemVar <nombreDeVariable>
+
+Donde
+	* nombreDeVariable es el nombre o n£mero de variable (entre comillas)
+	  que se desee eliminar
+
+Ejemplo:
+
+doRemVar "MiVariable"
+
+Notas:
+
+Si la variable que se desea eliminar no existe, se obtendr† un error.
+
+Ve tambiÇn:
+doLimpiaVar
+
+
+[4.13] Valor[#] (Funci¢n)
+
+Devuelve el valor de la variable indicada.
+
+Sintaxis:
+
+[variable# = ]Valor(<nombreDeVariable>)
+
+Donde:
+	* variable es alguna entidad a la que se asignar† el valor obtenido.
+	* nombreDeVariable es el identificador o n£mero de variable (entre
+	  comillas) del que se quiere obtener el valor.
+
+Ejemplo:
+
+ElValor = Valor("MiVariable") 
+
+Notas:
+
+Si no existe la variable se obtendr† un error. Esta funci¢n devuelve un valor
+de tipo DOUBLE.
+
+
+Ve tambiÇn:
+CuentaVar
+
+[4.14] Constructor (Procedimiento)
+
+Establece los valores iniciales de los procesos. Es importante ejecutar
+este procedimiento antes de llevar a cabo cualquier intento de manejar
+los procedimientos y funciones del m¢dulo ANALIZEM.
+
+Sintaxis:
+
+Constructor
+
+Ejemplo:
+
+Constructor 
+
+Notas:
+
+Si no se ejecuta este procedimiento, podr°an ocurrir errores a la hora de
+intentar utilizar las funciones y procedimientos del m¢dulo ANALIZEM.
+
+Ve tambiÇn:
+
+Destructor
+
+[4.15] Destructor (Procedimiento)
+
+Elimina los valores iniciales de los procesos. Aunque no es estrictamente
+necesario ejecutar este procedimiento, s° se recomienda para liberar los
+recursos que utilicen las variables utilizadas en el programa.
+
+Sintaxis:
+
+Destructor
+
+Ejemplo:
+
+Destructor 
+
+Notas:
+
+Si no se ejecuta este procedimiento, podr°an desperdiciarse recursos del
+programa. Adem†s, es buena pr†ctica de programaci¢n.
+
+Ve tambiÇn:
+
+Constructor
+
